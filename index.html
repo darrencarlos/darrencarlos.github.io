@@ -8,10 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js"></script>
 </head>
 <body>
-    <h1>Upload Video</h1>
-    <input type="file" id="fileButton" />
-    <button onclick="uploadFile()">Upload</button>
-
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -24,26 +20,23 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
+    </script>
 
-        function uploadFile() {
-            const file = document.getElementById('fileButton').files[0];
-            if (!file) {
-                alert('Please select a file to upload.');
-                return;
-            }
+    <h1>Upload Video</h1>
+    <input type="file" id="fileInput" />
+    <button id="uploadBtn">Upload</button>
 
-            alert('File selected.');
-            const storageRef = storage.ref('videos/' + file.name);
-            alert('Constant storageRef initialized.');
-            storageRef.put(file).then(() => {
-                alert('Upload successful!');
-            }).catch((error) => {
-                console.error('Upload failed:', error);
-                alert('Upload failed: ' + error.message);
+    <script>
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            const file = document.getElementById('fileInput').files[0];
+            const storageRef = firebase.storage().ref('videos/' + file.name);
+
+            storageRef.put(file).then((snapshot) => {
+                alert('File successfully uploaded!');
             });
-        }
+       });
     </script>
 </body>
 </html>
