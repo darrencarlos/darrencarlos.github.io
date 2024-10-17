@@ -14,7 +14,7 @@
 
     <script>
         // Firebase configuration
-        var firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyAz1blrYMAQMkpf2PdJcvQhGKv21XYckAE",
             authDomain: "test-offline-viewing.firebaseapp.com",
             projectId: "test-offline-viewing",
@@ -25,16 +25,16 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
 
         function uploadFile() {
-            var storage = firebase.storage();
-            var file = document.getElementById('fileButton').files[0];
+            const file = document.getElementById('fileButton').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
                 return;
             }
 
-            var storageRef = storage.ref('videos/' + file.name);
+            const storageRef = storage.ref('videos/' + file.name);
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
             }).catch((error) => {
