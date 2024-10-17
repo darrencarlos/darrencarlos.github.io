@@ -34,7 +34,7 @@
                 return;
             }
 
-            const storageRef = storage.ref('your/path/' + file.name);
+            const storageRef = storage.ref('../videos/' + file.name);
 
             storageRef.put(file)
                 .then(() => {
