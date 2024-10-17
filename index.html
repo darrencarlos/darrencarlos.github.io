@@ -8,6 +8,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js"></script>
 </head>
 <body>
+    <h1>Upload Video</h1>
+    <input type="file" id="fileInput">
+    <button id="uploadBtn">Upload</button>
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -24,8 +27,7 @@
 
         const storage = firebase.storage();
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('uploadBtn').addEventListener('click', function () {
+        document.getElementById('uploadBtn').addEventListener('click', function () {
             alert('Script start!');
             const file = document.getElementById('fileInput').files[0];
             alert('File selected!');
@@ -39,12 +41,8 @@
             });
 
             alert('End of script!');
-            });
+        
         });
-    </script>
-
-    <h1>Upload Video</h1>
-    <input type="file" id="fileInput">
-    <button id="uploadBtn">Upload</button>
+     </script>
 </body>
 </html>
