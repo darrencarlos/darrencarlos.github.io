@@ -15,8 +15,7 @@
             projectId: "test-offline-viewing",
             storageBucket: "test-offline-viewing.appspot.com",
             messagingSenderId: "943885592597",
-            appId: "1:943885592597:web:2f25d0bda43384dce6461c",
-            measurementId: "G-QNQVPT4MMJ"
+            appId: "1:943885592597:web:2f25d0bda43384dce6461c"
         };
         firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
@@ -33,17 +32,18 @@
             alert('File selected');
 
             try{
-            const storageRef = storage.ref('videos/' + file.name);
-            alert(storageRef);
-            storageRef.put(file).then(() => {
+                const storageRef = storage.ref('videos/' + file.name);
+                alert(storageRef);
+            
+                storageRef.put(file).then(() => {
                 alert('Upload successful!');
-            }).catch((error) => {
-                console.error('Upload failed:', error);
-                alert('Upload failed: ' + error.message);
-            });
-        } catch (error) {
-            alert('Error creating storage reference:', error);
-        }
+                }).catch((error) => {
+                    console.error('Upload failed:', error);
+                    alert('Upload failed: ' + error.message);
+                });
+            } catch (error) {
+                alert('Error creating storage reference:', error);
+            }
         }
     </script>
 </head>
