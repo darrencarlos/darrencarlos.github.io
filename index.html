@@ -22,17 +22,17 @@
     </script>
     <script>
         function uploadFile() {
-            console.log('Upload function called.');
+            alert('Upload function called.');
             const file = document.getElementById('fileButton').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
                 return;
             }
-            
-            console.log('File selected');
+
+            alert('File selected');
             const storageRef = storage.ref('videos/' + file.name);
             
-            console.log(storageRef);
+            alert(storageRef);
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
             }).catch((error) => {
