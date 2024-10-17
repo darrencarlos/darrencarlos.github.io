@@ -4,10 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Upload</title>
+    <script>
+        function validateForm() {
+            const fileInput = document.getElementById('video');
+            const filePath = fileInput.value;
+            const allowedExtensions = /(\.mp4|\.mov|\.avi|\.wmv|\.mkv)$/i;
+
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Please upload a video file (mp4, mov, avi, wmv, mkv).');
+                fileInput.value = '';
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <h1>Upload Video</h1>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
+    <form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
         <label for="video">Choose a video to upload:</label>
         <input type="file" id="video" name="video" accept="video/*" required>
         <input type="submit" value="Upload Video">
