@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Upload</title>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js"></script>
 </head>
 <body>
     <h1>Upload Video</h1>
@@ -14,7 +14,7 @@
 
     <script>
         // Firebase configuration
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyAz1blrYMAQMkpf2PdJcvQhGKv21XYckAE",
             authDomain: "test-offline-viewing.firebaseapp.com",
             projectId: "test-offline-viewing",
@@ -25,16 +25,16 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
 
         function uploadFile() {
-            const file = document.getElementById('fileButton').files[0];
+            var storage = firebase.storage();
+            var file = document.getElementById('fileButton').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
                 return;
             }
 
-            const storageRef = storage.ref('videos/' + file.name);
+            var storageRef = storage.ref('videos/' + file.name);
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
             }).catch((error) => {
