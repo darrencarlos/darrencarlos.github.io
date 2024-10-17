@@ -27,21 +27,25 @@
         firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
 
-        document.getElementById('uploadButton').addEventListener('click', () => {
+        document.getElementById('uploadButton').addEventListener('click', function () {
             const file = document.getElementById('fileInput').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
                 return;
             }
 
+            alert('File selected:' + file.name);
+
             const storageRef = storage.ref('../videos/' + file.name);
 
             storageRef.put(file)
                 .then(() => {
                     console.log('File uploaded successfully!');
+                    alert('File uploaded!');
                 })
                 .catch((error) => {
                     console.error('Upload failed:', error);
+                    alert('Error uploading the file: ' + error.message);
                 });
         });
     </script>
