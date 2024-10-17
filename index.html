@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEST</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="/firebaseConfig.js"></script>
+    <script src="/uploadFile.js"></script>
     <script>
         function validateForm() {
             const fileInput = document.getElementById('video');
@@ -21,10 +25,7 @@
 </head>
 <body>
     <h1>Upload Video</h1>
-    <form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <label for="video">Choose a video to upload:</label>
-        <input type="file" id="video" name="video" accept="video/*" required>
-        <input type="submit" value="Upload Video">
-    </form>
+    <input type="file" id="fileButton" />
+    <button onclick="uploadFile()">Upload</button>
 </body>
 </html>
