@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Upload</title>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"></script>
 </head>
 <body>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+    <h1>Upload Video</h1>
+    <input type="file" id="fileInput" />
+    <button id="uploadBtn">Upload</button>
+
+    <script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAz1blrYMAQMkpf2PdJcvQhGKv21XYckAE",
@@ -22,27 +24,19 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-    </script>
+        firebase.initializeApp(firebaseConfig);
 
-    <h1>Upload Video</h1>
-    <input type="file" id="fileInput" />
-    <button id="uploadBtn">Upload</button>
+        const storage = firebase.storage();
 
-    <script>
-        const storage = getStorage(app);
-
-        const file = document.getElementById('fileInput').files[0];
-        const storageRef = ref(storage, 'videos/' + file.name);
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            const file = document.getElementById('fileInput').files[0];
+            const storageRef = storage.ref('videos/' + file.name);
         
-        alert('Firebase storage reference initialized.');
-
-        uploadBytes(storageRef, file).then((snapshot) => {
-            alert('File successfully uploaded!');
-            console.log('File successfully uploaded: ', snapshot);
-        }).catch((error) => {
-            alert('Error uploading the file!');
-            console.log('Error uploading the file: ', error);
+            storageRef.put(file).then((snapshot) => {
+                alert('File successfully uploaded!');
+            }).catch((error) => {
+                alert('Error uploading file!');
+            });
         });
     </script>
 </body>
