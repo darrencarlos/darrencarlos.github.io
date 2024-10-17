@@ -31,7 +31,7 @@
 
             alert('File selected');
             const storageRef = storage.ref('videos/' + file.name);
-            
+            alert('Under storageRef');
             alert(storageRef);
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
