@@ -28,6 +28,7 @@
         const storage = firebase.storage();
 
         document.getElementById('uploadButton').addEventListener('click', function () {
+            alert('Button clicked!');
             const file = document.getElementById('fileInput').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
