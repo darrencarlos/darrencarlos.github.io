@@ -34,7 +34,9 @@
                 return;
             }
 
+            alert('File selected.');
             const storageRef = storage.ref('videos/' + file.name);
+            alert('Constant storageRef initialized.');
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
             }).catch((error) => {
