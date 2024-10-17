@@ -28,9 +28,9 @@
         alert(firebaseConfig.storageBucket);
         alert(firebaseConfig.storage);
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
         alert('Firebase initialized!');
-        const storage = firebase.storage();
+        const storage = firebase.storage(app);
 
         document.getElementById('uploadButton').addEventListener('click', function() {
             alert('Button clicked!');
