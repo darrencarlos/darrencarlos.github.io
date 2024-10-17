@@ -8,20 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
     <script src="/firebaseConfig.js"></script>
     <script src="/uploadFile.js"></script>
-    <script>
-        function validateForm() {
-            const fileInput = document.getElementById('video');
-            const filePath = fileInput.value;
-            const allowedExtensions = /(\.mp4|\.mov|\.avi|\.wmv|\.mkv)$/i;
-
-            if (!allowedExtensions.exec(filePath)) {
-                alert('Please upload a video file (mp4, mov, avi, wmv, mkv).');
-                fileInput.value = '';
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
     <h1>Upload Video</h1>
