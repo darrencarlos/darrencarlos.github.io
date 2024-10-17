@@ -1,6 +1,6 @@
 [
     {
-        "origin": ["*"],
+        "origin": ["https://darrencarlos.github.io"],
         "method": ["GET", "POST", "PUT", "DELETE"],
         "maxAge": 3600
     }
