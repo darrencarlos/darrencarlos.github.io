@@ -23,12 +23,18 @@
     <script>
         function uploadFile() {
             const file = document.getElementById('fileButton').files[0];
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            
             const storageRef = storage.ref('videos/' + file.name);
             
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
             }).catch((error) => {
                 console.error('Upload failed:', error);
+                alert('Upload failed: ' + error.message);
             });
         }
     </script>
