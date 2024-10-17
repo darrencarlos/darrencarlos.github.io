@@ -50,5 +50,21 @@
                 });
         });
     </script>
+
+<h1>Upload File</h1>
+<input type="file" id="fileInput" />
+<button id="uploadButton">Upload</button>
+
+<script>
+    document.getElementById('uploadButton').addEventListener('click', function() {
+        alert('Button clicked'); // This should pop up when the button is clicked
+        const file = document.getElementById('fileInput').files[0];
+        if (!file) {
+            alert('Please select a file to upload.');
+        } else {
+            alert('File selected: ' + file.name);
+        }
+    });
+</script>
 </body>
 </html>
