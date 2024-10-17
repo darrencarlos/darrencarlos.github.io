@@ -30,13 +30,17 @@
 
         document.getElementById('uploadBtn').addEventListener('click', function() {
             const file = document.getElementById('fileInput').files[0];
+            alert('File selected!');
             const storageRef = storage.ref('videos/' + file.name);
-        
+            alert('Firebase storage reference initialized!');
+
             storageRef.put(file).then((snapshot) => {
                 alert('File successfully uploaded!');
             }).catch((error) => {
                 alert('Error uploading file!');
             });
+
+            alert('End of script!');
         });
     </script>
 </body>
