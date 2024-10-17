@@ -1,7 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>TESTT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload</title>
 </head>
 <body>
-    <p>Welcome to the outside world!</p>
-    <button>Upload here</button>
+    <h1>Upload Video</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="video">Choose a video to upload:</label>
+        <input type="file" id="video" name="video" accept="video/*" required>
+        <input type="submit" value="Upload Video">
+    </form>
 </body>
+</html>
