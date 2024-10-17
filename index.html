@@ -31,7 +31,9 @@
     <script>
         document.getElementById('uploadBtn').addEventListener('click', function() {
             const file = document.getElementById('fileInput').files[0];
+            alert('File selected.');
             const storageRef = firebase.storage().ref('videos/' + file.name);
+            alert('Firebase storage reference initialized.');
 
             storageRef.put(file).then((snapshot) => {
                 alert('File successfully uploaded!');
