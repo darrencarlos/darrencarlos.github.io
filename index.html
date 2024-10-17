@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Upload</title>
+    <title>File Upload to Firebase</title>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js"></script>
 </head>
 <body>
-    <h1>Upload Video</h1>
-    <input type="file" id="fileInput"/>
-    <button id="uploadBtn">Upload</button>
+    <h1>Upload File to Firebase Storage</h1>
+    <input type="file" id="fileInput" />
+    <button id="uploadButton">Upload</button>
+
     <script>
-        // Firebase configuration
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAz1blrYMAQMkpf2PdJcvQhGKv21XYckAE",
             authDomain: "test-offline-viewing.firebaseapp.com",
@@ -24,25 +25,25 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-
         const storage = firebase.storage();
 
-        document.getElementById('uploadBtn').addEventListener('click', function () {
-            alert('Script start!');
+        document.getElementById('uploadButton').addEventListener('click', () => {
             const file = document.getElementById('fileInput').files[0];
-            alert('File selected!');
-            const storageRef = storage.ref('videos/' + file.name);
-            alert('Firebase storage reference initialized!');
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-            storageRef.put(file).then((snapshot) => {
-                alert('File successfully uploaded!');
-            }).catch((error) => {
-                alert('Error uploading file!');
-            });
+            const storageRef = storage.ref('your/path/' + file.name);
 
-            alert('End of script!');
-        
+            storageRef.put(file)
+                .then(() => {
+                    console.log('File uploaded successfully!');
+                })
+                .catch((error) => {
+                    console.error('Upload failed:', error);
+                });
         });
-     </script>
+    </script>
 </body>
 </html>
