@@ -21,7 +21,7 @@
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
+        const storage = firebase.storage(app);
     </script>
 
     <h1>Upload Video</h1>
@@ -32,14 +32,15 @@
         document.getElementById('uploadBtn').addEventListener('click', function() {
             const file = document.getElementById('fileInput').files[0];
             alert(file);
-            const storageRef = firebase.storage().ref('videos/' + file.name);
+            const storageRef = storage.ref('videos/' + file.name);
             alert('Firebase storage reference initialized.');
 
             storageRef.put(file).then(function(snapshot) {
                 alert('File uploaded successfully!');
                 console.log('File uploaded successfully!', snapshot);
             }).catch(function(error) {
-                alert('Error uploading file:', error);
+                alert('Error uploading file!');
+                console.log('Error uploading file:', error);
             });
        });
     </script>
