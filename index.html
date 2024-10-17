@@ -24,7 +24,8 @@
 
         const storage = firebase.storage();
 
-        document.getElementById('uploadBtn').addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('uploadBtn').addEventListener('click', function () {
             alert('Script start!');
             const file = document.getElementById('fileInput').files[0];
             alert('File selected!');
@@ -38,6 +39,7 @@
             });
 
             alert('End of script!');
+            });
         });
     </script>
 
