@@ -30,8 +30,9 @@
             }
 
             alert('File selected');
+
+            try{
             const storageRef = storage.ref('videos/' + file.name);
-            alert('Under storageRef');
             alert(storageRef);
             storageRef.put(file).then(() => {
                 alert('Upload successful!');
@@ -39,6 +40,9 @@
                 console.error('Upload failed:', error);
                 alert('Upload failed: ' + error.message);
             });
+        } catch (error) {
+            alert('Error creating storage reference:', error);
+        }
         }
     </script>
 </head>
