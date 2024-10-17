@@ -35,8 +35,11 @@
             const storageRef = firebase.storage().ref('videos/' + file.name);
             alert('Firebase storage reference initialized.');
 
-            storageRef.put(file).then((snapshot) => {
-                alert('File successfully uploaded!');
+            storageRef.put(file).then(function(snapshot) {
+                alert('File uploaded successfully!');
+                console.log('File uploaded successfully!', snapshot);
+            }).catch(function(error) {
+                alert('Error uploading file:', error);
             });
        });
     </script>
