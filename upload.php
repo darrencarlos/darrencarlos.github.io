@@ -25,4 +25,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo "Invalid request method.";
 }
+file_put_contents('debug.log', 'Upload script accessed' . PHP_EOL, FILE_APPEND);
 ?>
