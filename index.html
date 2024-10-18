@@ -19,7 +19,7 @@
     <h1>Upload File to Firebase Storage</h1>
     <input type="file" id="fileInput" />
     <button id="uploadButton">Upload</button>
-    <button id="galleryButton">Gallery</button>
+    <button id="galleryButton" onclick="goToGallery()">Gallery</button>
 
     <!-- Progress Bar Section -->
     <div id="progressContainer">
@@ -96,6 +96,11 @@
                 alert('No file selected!');
             }
         });
+        
+        // Function to go to the gallery page
+        function goToGallery() {
+            window.location.href = 'gallery.html'; // Redirect to gallery.html
+        }
     </script>
 </body>
 </html>
