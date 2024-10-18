@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Gallery</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        #videoContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .thumbnail {
-            margin: 10px;
-            display: inline-block;
+        .video-thumbnail {
+            width: 200px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
         }
-        img {
-            width: 150px; /* Thumbnail size */
-            height: auto; /* Maintain aspect ratio */
-            cursor: pointer; /* Change cursor on hover */
+        video {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -24,13 +26,12 @@
     <h1>Video Gallery</h1>
     <div id="videoContainer"></div>
 
-    <button onclick="goBack()">Go Back</button>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-        // Your web app's Firebase configuration
+        // Your Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDY2w9F4mH-yEwbpIbWi_ImYpxbVIDrPmQ",
             authDomain: "uat-offline-gallery-viewing.firebaseapp.com",
@@ -43,46 +44,44 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const firestore = getFirestore(app);
+        const storage = getStorage(app);
 
-        // Function to fetch and display video thumbnails
-        async function displayVideoThumbnails() {
+        // Function to Fetch and Display Videos
+        async function displayVideos() {
             const videoContainer = document.getElementById('videoContainer');
             videoContainer.innerHTML = ''; // Clear previous videos
 
+            // Get video URLs from Firestore
             const videoCollection = collection(firestore, 'videos');
             const videoSnapshot = await getDocs(videoCollection);
 
-            if (videoSnapshot.empty) {
-                console.log("No videos found.");
-                return;
+            // Iterate through each video document
+            for (const doc of videoSnapshot.docs) {
+                const videoData = doc.data();
+                const videoURL = videoData.url; // Assume your Firestore document has a 'url' field
+
+                // Create video element
+                const videoElement = document.createElement('video');
+                videoElement.setAttribute('controls', true);
+
+                const sourceElement = document.createElement('source');
+                sourceElement.src = videoURL;
+                sourceElement.type = 'video/mp4';
+
+                videoElement.appendChild(sourceElement);
+
+                // Create thumbnail container
+                const thumbnailContainer = document.createElement('div');
+                thumbnailContainer.className = 'video-thumbnail';
+                thumbnailContainer.appendChild(videoElement);
+
+                // Append to the main container
+                videoContainer.appendChild(thumbnailContainer);
             }
-
-            const videoList = videoSnapshot.docs.map(doc => doc.data().url); // Retrieve URLs
-
-            videoList.forEach(url => {
-                const thumbnailDiv = document.createElement('div');
-                thumbnailDiv.classList.add('thumbnail');
-
-                // Create thumbnail image
-                const thumbnailImage = document.createElement('img');
-                thumbnailImage.src = url + '?t=1'; // Add a query parameter to fetch the thumbnail
-                thumbnailImage.alt = 'Video Thumbnail';
-                thumbnailImage.onclick = () => {
-                    window.open(url, '_blank'); // Open video on click
-                };
-
-                thumbnailDiv.appendChild(thumbnailImage);
-                videoContainer.appendChild(thumbnailDiv);
-            });
         }
 
-        // Function to go back to the previous page
-        window.goBack = function() {
-            window.history.back();
-        }
-
-        // Display video thumbnails on page load
-        displayVideoThumbnails().catch((error) => {
+        // Display videos on page load
+        displayVideos().catch((error) => {
             console.error('Error fetching videos:', error);
         });
     </script>

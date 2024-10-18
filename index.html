@@ -31,6 +31,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
         
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -45,6 +46,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const storage = getStorage(app);
+        const firestore = getFirestore(app);
 
         alert('Welcome!');
 
@@ -80,14 +82,22 @@
                     },
                     () => {
                         // Get the download URL after a successful upload
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
                             console.log('File available at:', downloadURL);
                             alert('File uploaded successfully! Download URL: ' + downloadURL);
+
+                            // Save the download URL to Firestore
+                            try {
+                                await addDoc(collection(firestore, 'videos'), { url: downloadURL });
+                                console.log('Video URL saved to Firestore!');
+                            } catch (error) {
+                                console.error('Error saving video URL to Firestore:', error);
+                            }
 
                             // Hide progress bar after upload
                             progressContainer.style.display = 'none';
 
-                            // Refresh the page
+                            // Refresh the page or redirect to gallery
                             location.reload();
                         });
                     }
@@ -96,7 +106,7 @@
                 alert('No file selected!');
             }
         });
-        
+
         // Function to go to the gallery page
         window.goToGallery = function() {
             window.location.href = 'gallery.html'; // Redirect to gallery.html
