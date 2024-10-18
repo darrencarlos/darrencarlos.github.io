@@ -13,7 +13,6 @@
     <button id="uploadButton">Upload</button>
 
     <script type="module">
-        alert('Loading...');
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAz1blrYMAQMkpf2PdJcvQhGKv21XYckAE",
@@ -25,24 +24,18 @@
             measurementId: "G-QNQVPT4MMJ"
         };
 
-        alert(firebaseConfig.storageBucket);
-        alert(firebaseConfig.storage);
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        alert('Firebase initialized!');
         const storage = firebase.storage(app);
 
         document.getElementById('uploadButton').addEventListener('click', function() {
-            alert('Button clicked!');
             const file = document.getElementById('fileInput').files[0];
             if (!file) {
                 alert('Please select a file to upload.');
                 return;
             }
 
-            alert('File selected:' + file.name);
-
-            const storageRef = storage.ref('../videos/' + file.name);
+            const storageRef = storage.ref('videos/' + file.name); // Adjust path as needed
 
             storageRef.put(file)
                 .then(() => {
