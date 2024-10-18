@@ -12,18 +12,44 @@
         }
         .video-thumbnail {
             width: 200px;
-            height: 200px; /* Increased height to fit video and button */
+            height: 250px; /* Increased height to fit video and button */
             overflow: hidden;
             position: relative;
             text-align: center; /* Center-align content */
+            border: 1px solid #ccc; /* Optional: Border for better visibility */
+            border-radius: 5px; /* Optional: Rounded corners */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: Box shadow for better appearance */
         }
         video {
             width: 100%;
-            height: 100%;
+            height: 150px; /* Set video height */
         }
         button {
             margin-top: 5px; /* Spacing between video and button */
             width: 100%; /* Make button full width */
+            padding: 5px; /* Padding for button */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #007bff; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Font size */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
+        }
+        #backButton {
+            margin-bottom: 20px; /* Spacing below back button */
+            padding: 10px; /* Padding for the back button */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #28a745; /* Green button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Font size */
+        }
+        #backButton:hover {
+            background-color: #218838; /* Darker color on hover */
         }
     </style>
 </head>
@@ -60,6 +86,15 @@
             // Get video URLs from Firestore
             const videoCollection = collection(firestore, 'videos');
             const videoSnapshot = await getDocs(videoCollection);
+
+            // Check if there are any videos
+            if (videoSnapshot.empty) {
+                console.log('No videos found in Firestore.');
+                const noVideosMessage = document.createElement('p');
+                noVideosMessage.innerText = 'No videos available.';
+                videoContainer.appendChild(noVideosMessage);
+                return;
+            }
 
             // Iterate through each video document
             for (const doc of videoSnapshot.docs) {
@@ -106,6 +141,7 @@
             console.error('Error fetching videos:', error);
         });
 
+        // Function to go back to the previous page
         window.goBack = function() {
             window.history.back(); // Go back to the previous page
         }
