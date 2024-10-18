@@ -46,7 +46,7 @@
         const app = initializeApp(firebaseConfig);
         const storage = getStorage(app);
 
-        alert('Firebase initialized!');
+        alert('Welcome!');
 
         document.getElementById('uploadButton').addEventListener('click', () => {
             const fileInput = document.getElementById('fileInput');
@@ -99,8 +99,8 @@
         
         // Function to go to the gallery page
         function goToGallery() {
-            window.location.href = 'gallery.html'; // Redirect to gallery.html
-        }
+            window.location.href = '/gallery.html'; // Redirect to gallery.html
+        };
     </script>
 </body>
 </html>
