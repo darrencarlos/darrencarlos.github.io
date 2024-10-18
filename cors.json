@@ -1,7 +1,8 @@
 [
     {
-        "origin": ["https://darrencarlos.github.io"],
+        "origin": ["*"],
         "method": ["GET", "POST", "PUT", "DELETE"],
-        "maxAge": 3600
+        "maxAge": 3600,
+        "responseHeader": ["Content-Type"]
     }
 ]
