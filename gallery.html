@@ -9,10 +9,14 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        video {
-            display: block;
-            margin: 10px 0;
-            max-width: 100%; /* Make videos responsive */
+        .thumbnail {
+            margin: 10px;
+            display: inline-block;
+        }
+        img {
+            width: 150px; /* Thumbnail size */
+            height: auto; /* Maintain aspect ratio */
+            cursor: pointer; /* Change cursor on hover */
         }
     </style>
 </head>
@@ -40,27 +44,35 @@
         const app = initializeApp(firebaseConfig);
         const firestore = getFirestore(app);
 
-        // Function to fetch and display videos
-        async function displayVideos() {
+        // Function to fetch and display video thumbnails
+        async function displayVideoThumbnails() {
             const videoContainer = document.getElementById('videoContainer');
             videoContainer.innerHTML = ''; // Clear previous videos
 
             const videoCollection = collection(firestore, 'videos');
             const videoSnapshot = await getDocs(videoCollection);
+
+            if (videoSnapshot.empty) {
+                console.log("No videos found.");
+                return;
+            }
+
             const videoList = videoSnapshot.docs.map(doc => doc.data().url); // Retrieve URLs
 
             videoList.forEach(url => {
-                const videoElement = document.createElement('video');
-                videoElement.width = 320; // Set video width
-                videoElement.height = 240; // Set video height
-                videoElement.controls = true;
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.classList.add('thumbnail');
 
-                const sourceElement = document.createElement('source');
-                sourceElement.src = url;
-                sourceElement.type = 'video/mp4';
+                // Create thumbnail image
+                const thumbnailImage = document.createElement('img');
+                thumbnailImage.src = url + '?t=1'; // Add a query parameter to fetch the thumbnail
+                thumbnailImage.alt = 'Video Thumbnail';
+                thumbnailImage.onclick = () => {
+                    window.open(url, '_blank'); // Open video on click
+                };
 
-                videoElement.appendChild(sourceElement);
-                videoContainer.appendChild(videoElement);
+                thumbnailDiv.appendChild(thumbnailImage);
+                videoContainer.appendChild(thumbnailDiv);
             });
         }
 
@@ -69,8 +81,8 @@
             window.history.back();
         }
 
-        // Display videos on page load
-        displayVideos().catch((error) => {
+        // Display video thumbnails on page load
+        displayVideoThumbnails().catch((error) => {
             console.error('Error fetching videos:', error);
         });
     </script>
