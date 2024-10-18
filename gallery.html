@@ -167,6 +167,10 @@
                 });
         }
 
+        navigator.storage.estimate().then(estimate => {
+            console.log(`Quota: ${estimate.quota}, Usage: ${estimate.usage}`);
+        });
+
         // Function to go back to the previous page
         window.goBack = function() {
             window.history.back(); // Go back to the previous page
