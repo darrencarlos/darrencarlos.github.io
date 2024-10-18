@@ -12,6 +12,9 @@
             width: 100%;
             height: 20px;
         }
+        video {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -68,11 +71,7 @@
                 // Track the upload progress
                 uploadTask.on('state_changed',
                     (snapshot) => {
-                        // Calculate and update progress
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log('Upload is ' + progress + '% done');
-                        
-                        // Update the progress bar and label
                         document.getElementById('progressBar').value = progress;
                         document.getElementById('progressLabel').innerText = progress.toFixed(0) + '%';
                     },
@@ -80,12 +79,8 @@
                         console.error('Upload failed:', error);
                     },
                     async () => {
-                        // Hide progress bar when upload is complete
                         progressContainer.style.display = 'none';
-
-                        // Get the download URL and save it to Firestore
                         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        console.log('File available at:', downloadURL);
 
                         // Save video URL to Firestore
                         try {
