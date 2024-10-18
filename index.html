@@ -19,15 +19,14 @@
     <h1>Upload File to Firebase Storage</h1>
     <input type="file" id="fileInput" />
     <button id="uploadButton">Upload</button>
+    <button id="galleryButton">Gallery</button>
 
     <!-- Progress Bar Section -->
     <div id="progressContainer">
-        <label for="progressBar">Upload Progress:</label>
+        <label for="progressBar">Upload Progress: </label>
         <progress id="progressBar" value="0" max="100"></progress>
         <span id="progressLabel">0%</span>
     </div>
-
-    <button id="galleryButton">Gallery Here</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
