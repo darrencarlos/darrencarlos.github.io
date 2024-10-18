@@ -4,7 +4,6 @@ const URLS_TO_CACHE = [
     '/index.html',        
     '/gallery.html',      
     '/service-worker.js',
-    '/cors.json',
 ];
 
 const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];  // Add any other video formats you want to handle
