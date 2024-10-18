@@ -48,7 +48,7 @@
         const storage = getStorage(app);
         const firestore = getFirestore(app);
 
-        alert('Welcome!');
+        alert('Firebase configuration initialized.');
 
         document.getElementById('uploadButton').addEventListener('click', () => {
             const fileInput = document.getElementById('fileInput');
@@ -79,6 +79,7 @@
                     (error) => {
                         // Handle errors during upload
                         console.error('Upload failed:', error);
+                        alert('Upload failed: ' + error);
                     },
                     () => {
                         // Get the download URL after a successful upload
@@ -90,12 +91,17 @@
                             try {
                                 await addDoc(collection(firestore, 'videos'), { url: downloadURL });
                                 console.log('Video URL saved to Firestore!');
+                                alert('Video URL saved to Firestore!');
                             } catch (error) {
                                 console.error('Error saving video URL to Firestore:', error);
+                                alert('Error saving video URL to Firestore: ' + error);
                             }
 
                             // Hide progress bar after upload
                             progressContainer.style.display = 'none';
+
+                            // Refresh the page
+                            location.reload()
                         });
                     }
                 );
