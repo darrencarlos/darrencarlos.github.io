@@ -3,41 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload and Display Videos with Progress</title>
+    <title>File Upload to Firebase</title>
     <style>
         #progressContainer {
             display: none; /* Hidden until upload starts */
+            margin-top: 20px;
         }
         #progressBar {
             width: 100%;
             height: 20px;
         }
-        video {
-            margin: 10px 0;
-        }
-        #spinner {
-            display: none; /* Hidden until loading starts */
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-    <h1>Upload and Display Videos from Firebase Storage</h1>
-
-    <!-- Video Upload Section -->
-    <input type="file" id="fileInput" accept="video/*" />
+    <h1>Upload File to Firebase Storage</h1>
+    <input type="file" id="fileInput" />
     <button id="uploadButton">Upload</button>
-    
+
     <!-- Progress Bar Section -->
     <div id="progressContainer">
         <label for="progressBar">Upload Progress:</label>
@@ -45,19 +27,13 @@
         <span id="progressLabel">0%</span>
     </div>
 
-    <!-- Loading Spinner -->
-    <div id="spinner"></div>
-
-    <!-- Video Display Section -->
-    <h2>Uploaded Videos:</h2>
-    <div id="videoContainer"></div>
+    <button id="galleryButton">Gallery Here</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-        // Firebase configuration
+        
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCyAIzm4QyPnxJ6LFM1gH4yos7Tqb3GcEc",
             authDomain: "offline-viewing-uat.firebaseapp.com",
@@ -70,88 +46,56 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const storage = getStorage(app);
-        const firestore = getFirestore(app);
 
-        // Upload Video and Save URL to Firestore
-        document.getElementById('uploadButton').addEventListener('click', async () => {
+        alert('Firebase initialized!');
+
+        document.getElementById('uploadButton').addEventListener('click', () => {
             const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+            const file = fileInput.files[0]; // Get the selected file
 
             if (file) {
-                const storageRef = ref(storage, 'videos/' + file.name); // Reference to Firebase Storage
-                const uploadTask = uploadBytesResumable(storageRef, file);
+                // Create a storage reference for the file
+                const storageRef = ref(storage, 'videos/' + file.name); // 'videos/' folder in Firebase Storage
 
-                // Show progress bar and label
+                // Show progress bar
                 const progressContainer = document.getElementById('progressContainer');
                 progressContainer.style.display = 'block';
-                
-                // Track the upload progress
+
+                // Upload the file
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                // Monitor the upload progress
                 uploadTask.on('state_changed',
                     (snapshot) => {
+                        // Calculate the upload progress
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+
+                        // Update progress bar and label
                         document.getElementById('progressBar').value = progress;
                         document.getElementById('progressLabel').innerText = progress.toFixed(0) + '%';
                     },
                     (error) => {
+                        // Handle errors during upload
                         console.error('Upload failed:', error);
                     },
-                    async () => {
-                        progressContainer.style.display = 'none';
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    () => {
+                        // Get the download URL after a successful upload
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log('File available at:', downloadURL);
+                            alert('File uploaded successfully! Download URL: ' + downloadURL);
 
-                        // Save video URL to Firestore
-                        try {
-                            await addDoc(collection(firestore, 'videos'), { url: downloadURL });
-                            alert('File uploaded and URL saved to Firestore!');
-                            displayVideos(); // Refresh the displayed videos
-                        } catch (error) {
-                            console.error('Error saving video URL to Firestore:', error);
-                        }
+                            // Hide progress bar after upload
+                            progressContainer.style.display = 'none';
+                        });
                     }
                 );
             } else {
                 alert('No file selected!');
             }
         });
-
-        // Function to Fetch and Display All Videos from Firestore
-        async function displayVideos() {
-            const spinner = document.getElementById('spinner');
-            const videoContainer = document.getElementById('videoContainer');
-            videoContainer.innerHTML = ''; // Clear previous videos
-
-            // Show spinner while loading videos
-            spinner.style.display = 'block';
-            try {
-                const videoCollection = collection(firestore, 'videos');
-                const videoSnapshot = await getDocs(videoCollection);
-                const videoList = videoSnapshot.docs.map(doc => doc.data().url); // Retrieve URLs
-
-                videoList.forEach(url => {
-                    const videoElement = document.createElement('video');
-                    videoElement.width = 320;
-                    videoElement.height = 240;
-                    videoElement.controls = true;
-
-                    const sourceElement = document.createElement('source');
-                    sourceElement.src = url;
-                    sourceElement.type = 'video/mp4';
-
-                    videoElement.appendChild(sourceElement);
-                    videoContainer.appendChild(videoElement);
-                });
-            } catch (error) {
-                console.error('Error fetching videos:', error);
-            } finally {
-                // Hide spinner after loading
-                spinner.style.display = 'none';
-            }
-        }
-
-        // Display videos on page load
-        displayVideos().catch((error) => {
-            console.error('Error fetching videos:', error);
-        });
     </script>
+
+    <h2>G</h2>
 </body>
 </html>
