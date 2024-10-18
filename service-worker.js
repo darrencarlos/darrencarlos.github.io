@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Fetch event with fallback logic
+// Fetch event with enhanced error handling for caching videos
 self.addEventListener('fetch', (event) => {
     // Handle video requests specifically
     if (videoExtensions.some(extension => event.request.url.includes(extension))) {
@@ -30,20 +30,23 @@ self.addEventListener('fetch', (event) => {
                     return cachedResponse;
                 }
                 
-                // If not cached, attempt to fetch from network and cache it
+                // If not cached, attempt to fetch from network
                 return fetch(event.request, { credentials: 'omit' }).then((networkResponse) => {
-                    if (!networkResponse || networkResponse.status !== 200 || networkResponse.type === 'opaque') {
-                        // If response is opaque or failed, just return the network response (opaque or otherwise)
+                    // Check if the response is valid before caching
+                    if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                        // If response is invalid (e.g., opaque response), just return the response
+                        console.log('Non-cacheable response (probably opaque):', networkResponse.type);
                         return networkResponse;
                     }
 
-                    // Cache the video and return it
+                    // Cache the valid video response and return it
                     return caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, networkResponse.clone());
                         return networkResponse;
                     });
-                }).catch(() => {
+                }).catch((error) => {
                     // Fallback: If both cache and network fail, return a custom response
+                    console.error('Failed to fetch video or cache it:', error);
                     return new Response('Video is unavailable offline.');
                 });
             })
