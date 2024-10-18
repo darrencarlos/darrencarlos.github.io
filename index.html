@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload to Firebase</title>
+    <title>Offline Gallery using Firebase</title>
     <style>
         #progressContainer {
             display: none; /* Hidden until upload starts */
@@ -12,6 +12,20 @@
         #progressBar {
             width: 100%;
             height: 20px;
+        }
+        h1, label, span, button {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        button {
+            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #007bff; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 10px; /* Font size */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
         }
     </style>
 </head>
