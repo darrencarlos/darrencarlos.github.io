@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload and Display Videos from Firebase</title>
+    <title>Upload and Display Videos with Progress</title>
+    <style>
+        #progressContainer {
+            display: none; /* Hidden until upload starts */
+        }
+        #progressBar {
+            width: 100%;
+            height: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Upload and Display Videos from Firebase Storage</h1>
@@ -11,6 +20,13 @@
     <!-- Video Upload Section -->
     <input type="file" id="fileInput" accept="video/*" />
     <button id="uploadButton">Upload</button>
+    
+    <!-- Progress Bar Section -->
+    <div id="progressContainer">
+        <label for="progressBar">Upload Progress:</label>
+        <progress id="progressBar" value="0" max="100"></progress>
+        <span id="progressLabel">0%</span>
+    </div>
     
     <!-- Video Display Section -->
     <h2>Uploaded Videos:</h2>
@@ -45,15 +61,29 @@
                 const storageRef = ref(storage, 'videos/' + file.name); // Reference to Firebase Storage
                 const uploadTask = uploadBytesResumable(storageRef, file);
 
+                // Show progress bar and label
+                const progressContainer = document.getElementById('progressContainer');
+                progressContainer.style.display = 'block';
+                
+                // Track the upload progress
                 uploadTask.on('state_changed',
                     (snapshot) => {
+                        // Calculate and update progress
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         console.log('Upload is ' + progress + '% done');
+                        
+                        // Update the progress bar and label
+                        document.getElementById('progressBar').value = progress;
+                        document.getElementById('progressLabel').innerText = progress.toFixed(0) + '%';
                     },
                     (error) => {
                         console.error('Upload failed:', error);
                     },
                     async () => {
+                        // Hide progress bar when upload is complete
+                        progressContainer.style.display = 'none';
+
+                        // Get the download URL and save it to Firestore
                         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                         console.log('File available at:', downloadURL);
 
