@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gallery</title>
+    <style>
+        #videoContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .video-thumbnail {
+            width: 200px;
+            height: 250px; /* Increased height to fit video and button */
+            overflow: hidden;
+            position: relative;
+            text-align: center; /* Center-align content */
+            border: 1px solid #ccc; /* Optional: Border for better visibility */
+            border-radius: 5px; /* Optional: Rounded corners */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: Box shadow for better appearance */
+        }
+        h1, button {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        video {
+            width: 100%;
+            height: 150px; /* Set video height */
+        }
+        button {
+            margin-top: 5px; /* Spacing between video and button */
+            width: 80%; /* Make button full width */
+            padding: 5px; /* Padding for button */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #007bff; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Font size */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
+        }
+        #backButton {
+            width: 100%;
+            margin-bottom: 20px; /* Spacing below back button */
+            padding: 10px; /* Padding for the back button */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #28a745; /* Green button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Font size */
+        }
+        #backButton:hover {
+            background-color: #218838; /* Darker color on hover */
+        }
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="goBack()">Back</button>
+    <h1>Video Gallery</h1>
+    <div id="videoContainer"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-storage.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTwxsoj7-kvOL9xTjAQ6TRsg02Dq3QfEo",
+            authDomain: "is-b31a6.firebaseapp.com",
+            projectId: "is-b31a6",
+            storageBucket: "is-b31a6.firebasestorage.app",
+            messagingSenderId: "220488523420",
+            appId: "1:220488523420:web:3d2391e1d57c7a9db39759",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const firestore = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Function to Fetch and Display Videos
+        async function displayVideos() {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = ''; // Clear previous videos
+
+            // Get video URLs from Firestore
+            const videoCollection = collection(firestore, 'videos');
+            const videoSnapshot = await getDocs(videoCollection);
+
+            // Check if there are any videos
+            if (videoSnapshot.empty) {
+                console.log('No videos found in Firestore.');
+                const noVideosMessage = document.createElement('p');
+                noVideosMessage.innerText = 'No videos available.';
+                videoContainer.appendChild(noVideosMessage);
+                return;
+            }
+
+            // Iterate through each video document
+            for (const doc of videoSnapshot.docs) {
+                const videoData = doc.data();
+                const videoURL = videoData.url; // Assume your Firestore document has a 'url' field
+
+                // Create video element
+                const videoElement = document.createElement('video');
+                videoElement.setAttribute('controls', true);
+
+                const sourceElement = document.createElement('source');
+                sourceElement.src = videoURL;
+                sourceElement.type = 'video/mp4';
+
+                videoElement.appendChild(sourceElement);
+
+                // Create thumbnail container
+                const thumbnailContainer = document.createElement('div');
+                thumbnailContainer.className = 'video-thumbnail';
+                thumbnailContainer.appendChild(videoElement);
+
+                // Create "Make available offline" button
+                const offlineButton = document.createElement('button');
+                offlineButton.innerText = 'Make available offline';
+                offlineButton.onclick = () => makeAvailableOffline(videoURL); // Attach click event
+
+                // Append button to the thumbnail container
+                thumbnailContainer.appendChild(offlineButton);
+
+                // Append to the main container
+                videoContainer.appendChild(thumbnailContainer);
+            }
+        }
+
+        // Function to handle making the video available offline
+        async function makeAvailableOffline(videoUrl) {
+            console.log(`Making video available offline: ${videoUrl}`);
+
+            if (!('caches' in window)) {
+                alert('Caching is not supported in your browser.');
+                return;
+            }
+
+            try {
+                const cache = await caches.open('video-cache-v1');
+                await cache.add(videoUrl);
+                alert('Video cached for offline viewing.');
+            } catch (error) {
+                console.error('Failed to cache video:', error);
+                alert('Failed to cache video: ' + error);
+            }
+        }
+
+        // Display videos on page load
+        displayVideos().catch((error) => {
+            console.error('Error fetching videos:', error);
+            alert('Error fetching videos: ' + error);
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+
+        // Function to go back to the previous page
+        window.goBack = function() {
+            window.history.back(); // Go back to the previous page
+        }
+    </script>
+</body>
+</html>
